@@ -16,9 +16,9 @@ A specialised sub-100M model can be assembled from larger models by extracting a
 
 The governing theory is the independence of causal mechanisms: capabilities that are modular transport cleanly, while entangled ones do not. This is preferred to the Platonic Representation Hypothesis, whose strong form is now contested. The model produced is the artefact; the characterisation of what transfers, at what cost, and under what dimensional gap is the contribution. Success is measured as the difference between transfer and distillation on contamination-resistant evaluations. The programme does not aim for state-of-the-art results.
 
-## 3. Naming
+## 3. Relevant work
 
-The relevant operations span several verbs — distil, transfer, edit, fuse, transport, transplant. Two umbrella terms exist in the literature. *Model merging* denotes parameter-space combination of same-lineage models and is therefore weight-space and same-family. *Knowledge fusion*, in the FuseLLM lineage, denotes capability-level combination, is architecture-agnostic, and is framed as the alternative to training from scratch; it is the closer fit. Neither term implies downsizing, and drawing a capability from a flagship into a small specialist is the contribution space. The programme is filed under *compact knowledge fusion* and carries the working name Alchemy.
+Two umbrella terms exist in the literature. *Model merging* denotes parameter-space combination of same-lineage models and is therefore weight-space and same-family. *Knowledge fusion*, in the FuseLLM lineage, denotes capability-level combination, is architecture-agnostic, and is framed as the alternative to training from scratch; it is the closer fit. Neither term implies downsizing, and drawing a capability from a flagship into a small specialist is the contribution space. The programme is filed under *compact knowledge fusion* and carries the working name Alchemy.
 
 ## 4. Constraints
 
@@ -81,7 +81,7 @@ Optimal transport (Singh & Jaggi, `1910.05653`; unbalanced and fused Gromov-Wass
         METRIC:  transfer-vs-distillation difference on uncontaminated evals
 ```
 
-## 7. Recommended direction
+## 7. Direction
 
 On-policy distillation serves as the proven backbone and the baseline every novel route must clear; it will produce a working specialist economically and is validated at the frontier. The research contribution lies in interpretation-guided transplant: extraction by crosscoder, mapping by optimal or Gromov-Wasserstein transport, and installation by a predictive objective. The question of whether principled transport improves on plain on-policy distillation, and for which capabilities, is the paper. Within this, the predictive route addresses general capacity, the dictionary and control routes address specialties, transport is the map beneath both, quality-diversity is the outer search, and reinforcement learning is reserved for exceeding the teacher. Whichever route prevails, the durable result is the transportability map — an account of what moves, how, and at what cost.
 
@@ -96,24 +96,9 @@ On-policy distillation serves as the proven backbone and the baseline every nove
 7. **Search.** Does representation-level quality-diversity discover transplant recipes that improve on hand-designed ones, and does it deliver the general-and-specialty archive?
 8. **Theory.** Is transportability predictable from a measure of modularity or transport cost?
 
-## 9. Experiment plan
+the large model are excluded by design: they are coupling rather than transmutation, and leave the small model dependent at inference. The programme treats the model as the artefact and the characterisation as the contribution; an honest account of how much capability is recovered, at what cost, and where it breaks is preferred to a claim of having beaten a baseline.
 
-Each experiment yields one downloadable model and a short written account.
-
-- **Experiment 0 — first commit.** The smallest closed loop: one narrow capability, a same-family teacher with public SAEs (for instance Gemma with Gemma Scope), the cheapest installation, and a single transfer-versus-distillation difference recorded. The on-policy distillation baseline is established here.
-- **Experiment 1 — comparison.** Four end-to-end students for the same capability, teacher, and evaluation — OT-fusion, crosscoder-transplant, JEPA-predictive, and steering — alongside the on-policy distillation baseline, to determine which route prevails for general capacity and which for specialty.
-- **Experiment 2 — the map.** Replacing naive matching with affine stitch, then OT, then unbalanced GW, to quantify what a principled map provides, particularly across the dimensional gap.
-- **Experiment 3 — substrate.** A transfer-ready student against a vanilla one, to test whether architecture designed for receiving helps.
-- **Experiment 4 — shaping.** On-policy distillation or reinforcement learning applied on top of the best transplant, to test whether the teacher can be exceeded, while tracking diversity.
-- **Experiment 5 — composition and search.** Stacking the winning routes (extract, map, install, shape) and running representation-level quality-diversity to optimise the recipe and build the general-and-specialty archive, while probing the interference ceiling.
-
-## 10. Strategy and discipline
-
-The order of work is comparison first and composition second: establish which route prevails where, then stack the winners. A downloadable Experiment 0 model is expected before anything from Experiment 1 onward is undertaken, so that the first commit precedes the first paper. At most two threads are active at once, the smallest working loop is shipped before scaling, and results are made public within days of becoming functional.
-
-Retrieval, cascades, and deferral to the large model are excluded by design: they are coupling rather than transmutation, and leave the small model dependent at inference. The programme treats the model as the artefact and the characterisation as the contribution; an honest account of how much capability is recovered, at what cost, and where it breaks is preferred to a claim of having beaten a baseline.
-
-## 11. References
+## 9. References
 
 - Knowledge fusion: Wan et al., *Knowledge Fusion of LLMs* (FuseLLM), `2401.10491`; model-merging survey (ACM Computing Surveys, 2026), `2408.07666`.
 - On-policy distillation and RL transfer: Thinking Machines Lab, *On-Policy Distillation* (2025); OPD unification, `2605.16826`; *Learning beyond Teacher*, `2602.12125`; entropy-aware OPD, `2603.07079`.
