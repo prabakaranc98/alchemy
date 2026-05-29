@@ -1,29 +1,11 @@
-# Model Merging
+# Model merging
 
-**Layer:** Framing / baseline · **Role:** the adjacent field — and its hard ceiling
+Model merging combines models in parameter space, usually those of a common lineage that share a base and differ only in fine-tuning. The methods include weight averaging, task arithmetic by addition and subtraction of task vectors, TIES, which trims and elects signs to reduce interference, DARE, which drops and rescales, and evolutionary merging, which searches over merge coefficients. None requires training data; each operates by arithmetic on weights.
 
-## What it is
-Combining models **in parameter space**, usually *same-lineage* (same base, different finetunes): **weight averaging**, **task arithmetic** (add/subtract task vectors), **TIES** (trim + elect signs to cut interference), **DARE** (drop-and-rescale), **evolutionary merge** (search merge coefficients). No training data needed — just arithmetic on weights.
+Merging is the adjacent and recognisable field, but it works in weight space and within a model family, so it neither downsizes nor crosses architectures and is therefore not the project's frame, which is [knowledge fusion](knowledge-fusion.md). It matters instead as a source of techniques and as a constraint, the constraint being that merging saturates and cannot exceed the union of its parents; interference grows with the number of models and imposes a practical ceiling at roughly four to six. This ceiling is a central concern at the level of capabilities — how many transplanted capabilities can be co-installed before interference dominates — and is the reason that exceeding the source requires [reinforcement learning](rl-grpo.md) rather than further merging.
 
-## Why it matters for Alchemy
-Merging is the *recognizable* umbrella next door, but it's **weight-space and same-family** — it doesn't *downsize* and doesn't cross architectures, so it's not the project's frame ([knowledge-fusion](knowledge-fusion.md) is). It matters as a **source of techniques and a hard constraint**:
+The mechanism rests on the task vector, the difference between fine-tuned and base weights, with a merge formed as the base plus a weighted sum of such vectors; interference is reduced by sign election, by sparsification, or by restriction to [low-rank subspaces](pca-svd.md). Merging yields gains only for combinations no single parent possesses, never beyond their union. Its same-architecture and same-initialisation assumptions break down for the flagship-to-small case, where the dimensions differ, which is where [transport](transport-ot-gw.md) is required instead, and the four-to-six ceiling caps naive composition.
 
-> **Merging saturates and can't exceed the union of its parents** — interference grows with the number of models, with a documented ceiling around **4–6 models** ("Why Do More Experts Fail?", `2505.21226`).
+**References.** Model-merging survey (ACM Computing Surveys, 2026), `2408.07666`; *Why Do More Experts Fail?*, `2505.21226`; task arithmetic (Ilharco et al., 2023).
 
-This ceiling is a central worry at the *capability* level (Open Question 5): how many transplanted capabilities co-install before interference dominates? And it's why exceeding the source needs [RL](rl-grpo.md), not more merging.
-
-## The key mechanic
-- Task vector = `θ_finetuned − θ_base`; merge = base + weighted sum of task vectors.
-- Interference reduction: sign election (TIES), sparsification (DARE), or [low-rank SVD subspaces](pca-svd.md).
-- Only wins for **combinations no single parent has** — never beyond their union.
-
-## The catch
-- Same-architecture / same-init assumption breaks for flagship→tiny (different dims) — that's where [transport/GW](transport-ot-gw.md) is needed instead.
-- The 4–6 ceiling caps naive composition.
-
-## References
-- Model-merging survey (ACM Computing Surveys 2026), `2408.07666`
-- *Why Do More Experts Fail?*, `2505.21226`; task arithmetic (Ilharco et al., 2023)
-
-## Related
-[knowledge-fusion](knowledge-fusion.md) (the broader, cross-arch frame) · [pca-svd](pca-svd.md) (SVD subspaces reduce merge interference) · [control-steering](control-steering.md) (task vectors as install) · [quality-diversity](quality-diversity.md) (evolving merge recipes)
+**Related.** [knowledge-fusion](knowledge-fusion.md), [pca-svd](pca-svd.md), [control-steering](control-steering.md), [quality-diversity](quality-diversity.md).

@@ -1,26 +1,11 @@
-# Nonlinear ICA / Identifiability
+# Nonlinear ICA and identifiability
 
-**Layer:** Theory · **Role:** *when* a feature is real and transportable
+Independent component analysis recovers statistically independent sources from their mixtures. In the linear case the problem is identifiable: the true sources can be recovered up to permutation and scaling. In the nonlinear case it is not — without additional structure, infinitely many independent decompositions reproduce the same observations. Identifiability can be restored by conditioning on an auxiliary variable such as time, a label, or an environment index, as in the work of Hyvärinen and collaborators and in the identifiable VAE, under which the recovered factors are provably the generating ones.
 
-## What it is
-**Independent Component Analysis (ICA)** recovers statistically independent source signals from mixed observations. Classic linear ICA is *identifiable* (you can recover the true sources up to permutation/scale). **Nonlinear ICA** is not — without extra structure, infinitely many "independent" decompositions explain the same data. Modern results (Hyvärinen et al.; **iVAE**) restore identifiability by conditioning on **auxiliary variables** (time, labels, environment), making the recovered factors provably the true ones.
+This supplies the formal link between a modular mechanism in the sense of [independent causal mechanisms](icm-modularity.md) and a feature that can actually be moved. Identifiability distinguishes a direction that merely correlates with a behaviour from the direction that is its source; only the latter can be expected to transfer reliably. Sparse autoencoders are the practical and overcomplete descendant of this theory: the sparsity prior plays the role of the structural assumption that, heuristically, yields more nearly identifiable and monosemantic features (see [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md)).
 
-## Why it matters for Alchemy
-This is the **formal bridge between "modular mechanism" ([ICM](icm-modularity.md)) and "a feature I can actually move."** Identifiability is the difference between *a* direction that happens to correlate with a behavior and *the* direction that is the behavior's genuine source. You want to transplant the latter — the former won't transfer reliably.
+Mechanically, independence together with a structural assumption — sparsity, nonstationarity, or auxiliary conditioning — makes the latent factors recoverable up to trivial transformations, and a transport map across two models is precisely an attempt to undo such a transformation; identifiability is the assurance that a consistent set of factors exists to be mapped. The limitation is that the guarantees are strong in theory and fragile in practice, since the representations of language models are only approximately sparse and independent. Sparse autoencoders inherit this fragility through feature splitting, dead features, and ambiguity over whether a given unit encodes one feature or several.
 
-**Sparse autoencoders are the practical, overcomplete descendant** of this theory: a sparsity prior is the structural assumption that (heuristically) recovers monosemantic, more nearly identifiable features ([dictionary-sae-crosscoder](dictionary-sae-crosscoder.md)).
+**References.** Hyvärinen & Morioka, *Nonlinear ICA via auxiliary variables* (2016, 2019); Khemakhem et al., *Variational Autoencoders and Nonlinear ICA* (2020).
 
-## The key mechanic
-- Independence + an auxiliary/structural assumption (sparsity, nonstationarity, conditioning) ⇒ the latent factors are recoverable up to trivial transforms.
-- "Up to trivial transforms" is exactly what a [transport map](transport-ot-gw.md) is meant to undo across two models — identifiability tells you a *consistent* set of factors exists to map between.
-
-## The catch
-- Identifiability guarantees are strong on paper, fragile in practice; LLM features are only approximately sparse/independent.
-- SAEs inherit this fragility: feature splitting, dead features, and "is this one real feature or two?" ambiguity are open problems.
-
-## References
-- Hyvärinen & Morioka, *Nonlinear ICA via auxiliary variables* (2016, 2019)
-- Khemakhem et al., *Variational Autoencoders and Nonlinear ICA (iVAE)* (2020)
-
-## Related
-[icm-modularity](icm-modularity.md) (the principle this formalizes) · [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md) (the practical tool) · [pca-svd](pca-svd.md) (the linear, non-independent baseline)
+**Related.** [icm-modularity](icm-modularity.md), [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md), [pca-svd](pca-svd.md).

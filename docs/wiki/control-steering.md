@@ -1,29 +1,11 @@
-# Control route — Steering / Function / Task Vectors
+# Steering, function, and task vectors
 
-**Layer:** Install (route) · **Role:** the cheapest install — fast first delta
+This is a family of techniques that edit activations or weights to install a behaviour. A steering vector is a direction added to the residual stream at inference to shift behaviour. A function vector is a single vector, extracted from in-context examples, that induces a task when added to activations. A task vector is the difference between fine-tuned and base weights, a direction in weight space that can be added or subtracted to introduce or remove a skill. Circuit grafting copies a small subgraph of weights or attention heads that implements a behaviour.
 
-## What it is
-A family of **activation/weight-editing** techniques:
-- **Steering vectors** (RepE): add a direction to the residual stream at inference to push behavior.
-- **Function vectors** (Todd et al.): a single vector extracted from in-context examples that *induces a task* when added to activations.
-- **Task vectors / task arithmetic** (Ilharco et al.): `θ_finetuned − θ_base` is a weight-space direction you can add/subtract to add/remove a skill.
-- **Circuit grafting**: copy a small subgraph of weights/heads that implement a behavior.
+These provide the cheapest form of installation and the quickest route to a first measurement on a narrow specialty, which makes them suited to an initial experiment. A representative procedure extracts a direction — for instance a feature from a public dictionary — maps it into the student's space, adds it as a steering vector, and then folds it into the weights so that inference no longer depends on the teacher, keeping the result within the project's no-coupling boundary. Together with the [dictionary route](dictionary-sae-crosscoder.md), this is one of the two routes in which what was moved can be verified.
 
-## Why it matters for Alchemy
-This is the **cheapest install verb** and the fastest route to **one delta on the board** for a narrow specialty — ideal for **Exp 0**. Workflow: [extract](dictionary-sae-crosscoder.md) a direction (e.g. a Gemma Scope feature) → [map](transport-ot-gw.md) it to student space → add it as a steering vector → **fold it into the weights** so inference needs no teacher (staying inside the "no coupling" boundary). It's also one of the two routes (with the [dictionary](dictionary-sae-crosscoder.md)) where you can *verify* what moved.
+Concretely, a direction is obtained from the difference of means between contrasting prompts, from a decoder column of a sparse autoencoder, or by fitting a function vector; it is injected by adding a scaled copy to the activations at a chosen layer, with the scale swept; and it is made permanent by folding it into the layer's weights or bias to yield a standalone model. The route is shallow and brittle: a single direction rarely captures a rich capability, and its effect is sensitive to the layer and to scale. Stacking many task or steering vectors also encounters interference quickly, reproducing the [merging ceiling](model-merging.md) at the level of capabilities. It is well suited as a baseline and a first loop, but it is not the route that carries general competence, which is the role of the [predictive](predictive-jepa.md) approach.
 
-## The key mechanic
-- Find a direction (difference-of-means between contrastive prompts, an SAE decoder column, or a fit function vector).
-- Inject: `h ← h + α·d` at a chosen layer; sweep `α`.
-- Persist: fold the steer into the layer's bias/weights ⇒ standalone artifact.
+**References.** RepE (Zou et al., 2023); function vectors (Todd et al., 2024); task arithmetic (Ilharco et al., 2023).
 
-## The catch
-- **Shallow and brittle** — one direction rarely captures a rich capability; effects are layer- and scale-sensitive.
-- **Merge ceiling**: stacking many task/steering vectors hits interference fast (the [4–6 model ceiling](model-merging.md) at the capability level — Open Question 5).
-- Great as a baseline and a first loop; not the route that carries *general* capacity (that's [JEPA](predictive-jepa.md)).
-
-## References
-- RepE (Zou et al., 2023); Function vectors (Todd et al., 2024); Task arithmetic (Ilharco et al., 2023)
-
-## Related
-[dictionary-sae-crosscoder](dictionary-sae-crosscoder.md) (where the direction comes from) · [model-merging](model-merging.md) (the interference ceiling) · [predictive-jepa](predictive-jepa.md) (the deeper install for general capacity)
+**Related.** [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md), [model-merging](model-merging.md), [predictive-jepa](predictive-jepa.md).

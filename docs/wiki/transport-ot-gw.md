@@ -1,34 +1,11 @@
-# Transport route — Optimal Transport & Gromov-Wasserstein
+# Optimal transport and Gromov-Wasserstein
 
-**Layer:** Map (route + the primitive underneath) · **Role:** carry an object across two different spaces
+Optimal transport determines the least-cost way to move one probability distribution onto another and returns a coupling, a soft correspondence between points in the two spaces; OTFusion applies this to align the neurons of two networks before averaging them. Gromov-Wasserstein transport generalises the idea to spaces that are not directly comparable, differing in dimension or lacking shared coordinates, by matching their internal distance structures rather than their points. The unbalanced and fused variants further permit partial matching, in which not all mass need be transported, and the incorporation of feature similarity alongside geometry.
 
-## What it is
-**Optimal Transport (OT)** finds the cheapest way to move one probability distribution onto another, yielding a **coupling** — a soft correspondence between points in space A and space B. **OTFusion** uses this to align two networks' neurons before averaging. **Gromov-Wasserstein (GW)** generalizes OT to **spaces that aren't directly comparable** (different dimensions, no shared coordinates): instead of comparing points, it compares *intra-space distance structures*. **Unbalanced / fused GW** further allows partial matching (not all mass must move) and incorporating feature similarity.
+This is the mapping operation, and the means of bridging the gap between flagship and sub-100M dimensionality. The methods form the project's working ladder: an affine stitch fitted by least squares as the cheap baseline, optimal transport for a distribution-aware coupling, and Gromov-Wasserstein for the case in which the two spaces differ in dimension, which is the downsizing case. Beyond its use as a tool, the transport cost itself operationalises how alignable two models are, and is therefore a candidate measure of transferability rather than merely a means of achieving it.
 
-## Why it matters for Alchemy
-This is the **map** verb — the connective tissue every route reuses, and the answer to the **flagship-dim → sub-100M-dim gap**. The progression is the project's actual research ladder (Open Question 2):
+The construction is, for optimal transport, the minimisation of total movement cost under a ground metric to obtain a coupling matrix; and for Gromov-Wasserstein, the minimisation of distortion between the pairwise distances of the two spaces, which requires a ground metric within each space and is where [manifold learning](manifold-learning.md) supplies the intrinsic geometry. The output is a map applied to an [extracted](dictionary-sae-crosscoder.md) feature or subspace before it is [installed](control-steering.md). Two cautions apply. The alignment is of distributions and not of functions, so matched units may share statistics while differing in computational role, and alignment is therefore not equivalent to transfer of capability. And the method is a primitive rather than a complete procedure: it maps, but does not install or shape; the Gromov-Wasserstein objective is moreover non-convex and costly, and its unbalanced variants introduce further hyperparameters.
 
-> **affine stitch → OT → unbalanced GW**
+**References.** Singh & Jaggi, *Model Fusion via Optimal Transport*, `1910.05653`; *Fused Unbalanced Gromov-Wasserstein*, `2206.09398`.
 
-- An **affine stitch** (`Wx+b`, least-squares) is the cheap baseline map (good enough for Exp 0).
-- **OT** gives an optimal, distribution-aware coupling.
-- **GW** is what you need when the two spaces have *different dimensions* — exactly the downsizing case.
-
-Crucially, **the transport *cost* operationalizes "how alignable are these two models"** — it's a candidate modularity/transferability measure (Open Question 8), not just a tool.
-
-## The key mechanic
-- OT: minimize total moving cost given a ground metric between points ⇒ coupling matrix.
-- GW: minimize distortion of *pairwise distances* between spaces ⇒ works with no shared coordinate system. Needs a **ground metric per space** — which is where [manifold learning](manifold-learning.md) supplies intrinsic geometry.
-- Output is a map you apply to the [extracted](dictionary-sae-crosscoder.md) feature/subspace before [installing](control-steering.md) it.
-
-## The catch
-- **OT aligns *distribution*, not *function*** — matched neurons can have aligned statistics but different computational roles. Alignment ≠ capability transfer.
-- GW is non-convex and costly; partial/unbalanced variants add hyperparameters.
-- A primitive, **not a standalone hero**: it maps, it doesn't install or shape.
-
-## References
-- Singh & Jaggi, *Model Fusion via Optimal Transport (OTFusion)*, `1910.05653`
-- *Fused Unbalanced Gromov-Wasserstein (FUGW)*, `2206.09398`
-
-## Related
-[manifold-learning](manifold-learning.md) (the ground metric GW needs) · [pca-svd](pca-svd.md) (what gets mapped) · [platonic-representation](platonic-representation.md) (transport cost *measures* the alignment PRH assumes) · [control-steering](control-steering.md) (installing the mapped object)
+**Related.** [manifold-learning](manifold-learning.md), [pca-svd](pca-svd.md), [platonic-representation](platonic-representation.md), [control-steering](control-steering.md).

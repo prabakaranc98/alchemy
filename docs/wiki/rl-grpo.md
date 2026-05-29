@@ -1,26 +1,11 @@
-# Reward-driven RL (GRPO / PPO-style)
+# Reward-driven reinforcement learning
 
-**Layer:** Shape · **Role:** the *only* route that can push the student **beyond** the teacher
+This is reinforcement learning applied to the student against a reward signal, whether verifiable correctness, a reward model, or a preference. Group Relative Policy Optimization is the current workhorse: it samples a group of completions for each prompt, scores them, and updates toward the relatively better ones without a separate value network. Proximal Policy Optimization is the older actor-critic alternative.
 
-## What it is
-Reinforcement learning on the student against a **reward signal** (verifiable correctness, a reward model, a preference). **GRPO (Group Relative Policy Optimization)** is the current workhorse: sample a group of completions per prompt, score them, and push toward the relatively-better ones (no separate value network). PPO is the older actor-critic alternative.
+Its significance is that every other route is bounded by its source. Distillation cannot exceed the teacher's fidelity, and merging cannot exceed the union of its parents. Reinforcement learning is the one mechanism that can extrapolate beyond these bounds, since a reward allows the student to discover behaviour that no teacher demonstrated. It is therefore the final and optional shaping step, applied on top of the best available transplant.
 
-## Why it matters for Alchemy
-Every other route is bounded by its source: distillation and merging **can't exceed the teacher / union of parents** (the [merging ceiling](model-merging.md), the [distillation](distillation.md) fidelity gap). **RL is the one lever that can extrapolate past it** — via reward, the student can discover behavior neither teacher demonstrated (Open Question 6, "Learning beyond Teacher"). It's the final, optional **shape** step on top of the best transplant (**Exp 4**).
+The update has the student generate, scores the generations by reward, and applies a policy-gradient step toward higher reward; GRPO computes advantages relative to the sampled group rather than from a learned value function, which is cheaper and more stable for language models. In practice it is often layered after [on-policy distillation](on-policy-distillation.md): distil to competence, then optimise to exceed. The cautions are substantial. The method is sample-hungry, unstable, and limited by the student's capacity, so that a sub-100M model may simply be unable to host the extrapolated behaviour; rewards are also susceptible to gaming and must be verifiable or otherwise robust. It is best used to exceed a competent student rather than to train a weak one from the start.
 
-## The key mechanic
-- Student generates ⇒ reward scores ⇒ policy-gradient update toward higher reward.
-- GRPO uses *group-relative* advantages (rank within a sampled batch) instead of a learned value function — cheaper, stabler for LLMs.
-- Often layered *after* [OPD](on-policy-distillation.md): distill to competence, then RL to exceed.
+**References.** GRPO (DeepSeekMath and DeepSeek-R1); *Learning beyond Teacher*, `2602.12125`.
 
-## The catch
-- **Sample-hungry, unstable, and capacity-limited at <100M** — a tiny student may simply lack the capacity to host the extrapolated behavior.
-- Reward hacking; needs verifiable or robust rewards.
-- Use it to *exceed*, not to *bootstrap* — it's expensive to drive a weak student from scratch.
-
-## References
-- GRPO (DeepSeekMath / DeepSeek-R1 line)
-- *Learning beyond Teacher* (reward extrapolation), `2602.12125`
-
-## Related
-[on-policy-distillation](on-policy-distillation.md) (the cheaper backbone; RL goes on top) · [model-merging](model-merging.md) (the ceiling RL is meant to break) · [quality-diversity](quality-diversity.md) (population-based alternative/complement)
+**Related.** [on-policy-distillation](on-policy-distillation.md), [model-merging](model-merging.md), [quality-diversity](quality-diversity.md).

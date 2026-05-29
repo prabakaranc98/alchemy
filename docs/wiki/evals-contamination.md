@@ -1,28 +1,11 @@
-# Evals & Contamination
+# Evaluation and contamination
 
-**Layer:** Framing / measurement · **Role:** how we know a transfer actually worked
+Benchmark contamination refers to the leakage of public test sets into pretraining corpora, with the consequence that a high benchmark score may reflect memorisation rather than capability. Contamination-resistant evaluation measures capability with held-out, freshly constructed, or behaviourally probed instruments that the models cannot have seen.
 
-## What it is
-**Benchmark contamination** = public test sets have leaked into pretraining corpora, so a high leaderboard score can reflect memorization, not capability. **Contamination-resistant evaluation** measures capability with **held-out, freshly-constructed, or behaviorally-probed** evals the models couldn't have seen.
+The project's success criterion depends on trustworthy measurement, and is reported as a difference rather than an absolute: the score of the transferred student minus that of the distillation baseline, on a held-out or purpose-built evaluation rather than a published benchmark. Because both arms are run on the same evaluation, even an imperfect instrument gives a fair relative signal, provided it is not contaminated in a way that ceilings both arms; and because the student carries no teacher at inference, the evaluation must score the standalone model.
 
-## Why it matters for Alchemy
-The entire success criterion depends on trustworthy measurement. Alchemy reports a **delta**, not an absolute number:
+In practice one prefers purpose-built contrastive evaluations for the target capability, with held-out splits and fresh prompts, scored behaviourally — whether the generation exhibits the capability — rather than through a leaked multiple-choice set, and one reports the difference from the distillation baseline together with the difference from the untouched student, to establish whether anything moved at all. Two cautions apply. A purpose-built evaluation can be biased toward the mechanism that was installed, so it should be designed before the model is touched and a held-out split retained. And a small or negative difference is a valid result, indicating that the capability is not modular enough to move by the route attempted; the evaluation should not be adjusted until the difference becomes favourable.
 
-> `delta = score(transfer) − score(distillation)`, on a **held-out / self-built eval — never a raw leaderboard number.**
+**References.** Contamination findings across LLM benchmarks (2023–2025).
 
-Because both arms (transfer vs. [distillation](distillation.md) baseline) run on the *same* eval, even an imperfect eval gives a fair *relative* signal — but only if it isn't contaminated in a way that ceilings both arms. And since the student has **no teacher at inference** (the no-coupling boundary), the eval must score the *standalone* student's behavior.
-
-## The key mechanic
-- Prefer **self-constructed contrastive evals** for the target capability (held-out splits, fresh prompts).
-- Score behaviorally (does the generation show the capability?) rather than via a leaked multiple-choice set.
-- Report `transfer − distillation` *and* `transfer − raw student` (did anything move at all).
-
-## The catch
-- Self-built evals can be **biased toward the mechanism you installed** — design them before touching the model, keep a held-out split.
-- A small/negative delta is a **valid result** (this capability isn't modular enough to move that way) — don't tune the eval until it's positive.
-
-## References
-- Broad contamination findings across LLM benchmarks (2023–2025); measure deltas, not absolutes.
-
-## Related
-[distillation](distillation.md) (the baseline arm) · [PRIMER](../PRIMER.md) ("what success means") · [icm-modularity](icm-modularity.md) (a null delta = low modularity)
+**Related.** [distillation](distillation.md), [icm-modularity](icm-modularity.md), the [primer](../PRIMER.md).

@@ -1,47 +1,36 @@
-# Alchemy Wiki
+# Wiki
 
-Focused concept pages. Each is one idea: **what it is → why it matters for Alchemy → the key mechanic → the catch → references → related pages.**
+Concept notes supporting the [primer](../PRIMER.md). Each note defines one idea, states its role in the project, gives the mechanism and its principal limitation, and lists references and related notes.
 
-Read [`../PRIMER.md`](../PRIMER.md) first for how these fit together.
+The notes are grouped by the operation they serve.
 
-## Map of the territory
+**Theory — what is movable**
+- [icm-modularity](icm-modularity.md) — independent causal mechanisms; why modular structure transfers
+- [nonlinear-ica](nonlinear-ica.md) — identifiability; when an extracted feature is the genuine one
+- [platonic-representation](platonic-representation.md) — the convergence claim and why its strong form does not hold
 
-```
-THEORY  →  what is even movable
-EXTRACT →  turn a capability into an object
-MAP     →  carry the object across the gap
-INSTALL →  put it into the student, teacher-free
-SHAPE   →  push the student past the baseline
-SEARCH  →  evolve the recipe
-```
+**Extraction — capability to object**
+- [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md) — sparse autoencoders and crosscoders
+- [pca-svd](pca-svd.md) — linear subspace extraction as a baseline
 
-### Theory — what is movable
-- [icm-modularity](icm-modularity.md) — independent causal mechanisms; *why* modular things transfer
-- [nonlinear-ica](nonlinear-ica.md) — identifiability; *when* a feature is real and transportable
-- [platonic-representation](platonic-representation.md) — do all models converge? (and why the strong claim fails)
+**Mapping — across the representational gap**
+- [transport-ot-gw](transport-ot-gw.md) — optimal transport and Gromov-Wasserstein
+- [manifold-learning](manifold-learning.md) — intrinsic geometry as the ground metric
 
-### Extract — capability → object
-- [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md) — SAEs & crosscoders; the interpretable, verifiable route
-- [pca-svd](pca-svd.md) — cheap subspace extraction; the "what to move" baseline
+**Installation — into the student**
+- [predictive-jepa](predictive-jepa.md) — frozen-teacher latent prediction
+- [control-steering](control-steering.md) — steering, function, and task vectors
 
-### Map — carry across the gap
-- [transport-ot-gw](transport-ot-gw.md) — optimal transport & Gromov-Wasserstein; the connective primitive
-- [manifold-learning](manifold-learning.md) — intrinsic geometry; the ground metric GW needs
+**Shaping — beyond the baseline**
+- [on-policy-distillation](on-policy-distillation.md) — the backbone and the baseline to exceed
+- [rl-grpo](rl-grpo.md) — reward-driven optimisation and its capacity to surpass the teacher
 
-### Install — into the student, teacher-free
-- [predictive-jepa](predictive-jepa.md) — frozen-teacher latent prediction; the general-capacity spine
-- [control-steering](control-steering.md) — steering / function / task vectors; the cheap, brittle install
+**Search**
+- [quality-diversity](quality-diversity.md) — evolutionary search over recipes
 
-### Shape — past the baseline
-- [on-policy-distillation](on-policy-distillation.md) — the frontier-proven backbone *and* the baseline to beat
-- [rl-grpo](rl-grpo.md) — the only route that can exceed the teacher
-
-### Search — evolve the recipe
-- [quality-diversity](quality-diversity.md) — QD/evolutionary search over transplant recipes
-
-### Framing & baselines
-- [distillation](distillation.md) — classic KD and why it leaks
-- [model-merging](model-merging.md) — weight-space combination and its 4–6 ceiling
-- [knowledge-fusion](knowledge-fusion.md) — the capability-level umbrella Alchemy files under
-- [evals-contamination](evals-contamination.md) — why we measure deltas on held-out evals
-- [glossary](glossary.md) — quick definitions
+**Framing and baselines**
+- [distillation](distillation.md) — classical knowledge distillation and its fidelity gap
+- [model-merging](model-merging.md) — parameter-space combination and its ceiling
+- [knowledge-fusion](knowledge-fusion.md) — the capability-level frame the project adopts
+- [evals-contamination](evals-contamination.md) — measuring differences on uncontaminated evaluations
+- [glossary](glossary.md) — definitions

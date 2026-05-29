@@ -1,25 +1,11 @@
-# Manifold Learning
+# Manifold learning
 
-**Layer:** Map (supporting primitive) · **Role:** estimate the intrinsic geometry transport needs
+Manifold learning recovers the low-dimensional curved structure on which high-dimensional data lies. Isomap estimates geodesic distances along the data manifold, diffusion maps describe its random-walk geometry, and UMAP and t-SNE produce neighbour-preserving embeddings. Each addresses the question of the true shape and distance structure of a representation.
 
-## What it is
-Methods that recover the **low-dimensional curved structure** (manifold) that high-dimensional data lies on: **Isomap** (geodesic distances), **diffusion maps** (random-walk geometry), **UMAP / t-SNE** (neighbor-preserving embeddings). They answer "what's the *true* shape and distance structure of this representation?"
+Its relevance here is that [Gromov-Wasserstein transport](transport-ot-gw.md) requires a ground metric within each space — a measure of how far apart two activations are that respects the representation's actual geometry rather than naive Euclidean distance. Manifold learning supplies that metric: a faithful geometry yields a faithful map, while a poor one distorts the transported capability. The methods also serve as diagnostics, for instance in checking whether a teacher feature and its transplanted counterpart fall in the same neighbourhood.
 
-## Why it matters for Alchemy
-[Gromov-Wasserstein transport](transport-ot-gw.md) needs a **ground metric within each space** — a notion of "how far apart are these two activations" that respects the representation's real geometry, not naive Euclidean distance. Manifold learning **supplies that metric**. Get the geometry right and GW maps faithfully; get it wrong and the map distorts the capability.
+The procedure builds a neighbour graph, estimates geodesic or diffusion distances or an embedding from it, and feeds the resulting metric to the transport objective as its per-space cost. A caution is essential: UMAP and t-SNE are non-invertible and so are suitable for inspection but not for transport, since a point cannot be mapped back; for the transport metric one should use the geodesic or diffusion distances of Isomap or diffusion maps. Manifold estimates are in any case sensitive to the chosen neighbourhood size and to noise.
 
-They're also **diagnostics**: visualize whether a teacher feature and its transplanted student counterpart actually land in the same neighborhood.
+**References.** Tenenbaum et al., *Isomap* (2000); Coifman & Lafon, *Diffusion maps* (2006); McInnes et al., *UMAP* (2018).
 
-## The key mechanic
-- Build a neighbor graph ⇒ estimate geodesic/diffusion distances ⇒ a metric (Isomap, diffusion maps) or an embedding (UMAP).
-- Feed the *metric* into GW as its per-space cost matrix.
-
-## The catch
-- **UMAP and t-SNE are non-invertible** — great for *looking*, useless for *transporting* (you can't map a point back). Use them as diagnostics only; use Isomap/diffusion-map *distances* for the GW metric.
-- Manifold estimates are sensitive to neighbor count and noise.
-
-## References
-- Isomap (Tenenbaum et al., 2000); Diffusion maps (Coifman & Lafon, 2006); UMAP (McInnes et al., 2018)
-
-## Related
-[transport-ot-gw](transport-ot-gw.md) (consumes the metric) · [pca-svd](pca-svd.md) (the linear-geometry baseline)
+**Related.** [transport-ot-gw](transport-ot-gw.md), [pca-svd](pca-svd.md).

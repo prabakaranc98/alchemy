@@ -1,31 +1,11 @@
-# Predictive route — JEPA (frozen-teacher latent prediction)
+# Predictive transfer (JEPA)
 
-**Layer:** Install (route, via training objective) · **Role:** the *general-capacity* spine
+A joint-embedding predictive architecture trains a model to predict the latent representation of a target rather than to reconstruct a raw input or reproduce output logits. In this project the construction is to freeze the flagship as a target encoder and train the small student to predict its latents, so that the student acquires the teacher's representational geometry rather than its surface outputs.
 
-## What it is
-A **Joint-Embedding Predictive Architecture (JEPA)** trains a model to **predict the latent representation of a target** rather than reconstruct raw inputs or match output logits. In Alchemy's framing: **freeze the flagship as a target encoder; train the tiny student to predict the teacher's latents.** The student learns the teacher's representation *geometry*, not its brittle surface outputs.
+This is the project's principal means of transferring general competence, and the installation route with the strongest supporting evidence for the stated goal. Frozen-teacher schemes decouple the student's architecture from the teacher's, which is necessary when the student is a much smaller and structurally different model; small students have been observed to do disproportionately well under such schemes, so that compute spent on the student rather than on retraining the teacher is well allocated; and predicting latents transfers structure that logit-level distillation tends to lose, for the reasons set out under [distillation](distillation.md). It is the installation step of the composed recipe, between mapping and shaping.
 
-## Why it matters for Alchemy
-This is the **primary spine for general capacity** and the strongest-evidence install route for the project's goal:
+The teacher is held fixed while the student and a small predictor head are trained to match the teacher's latents at chosen layers, with a [mapped](transport-ot-gw.md) target space accommodating the difference in dimension. The loss is computed in latent space, by cosine similarity or mean squared error on representations, and is often made asymmetric so that the teacher is predicted from the student's context; predicting at several layers transfers a richer geometric stack. The route carries two costs. It requires training the student, which is more expensive than editing or grafting; and it is liable to representational collapse, in which the student maps all inputs to a trivial constant, against which the usual safeguards — stop-gradient, asymmetry, and variance or covariance regularisation — are needed.
 
-- **Frozen-teacher schemes decouple student and teacher architectures** (SALT) — exactly what you need when the student is a different, much smaller model.
-- **Small students do disproportionately well** — compute spent on the *student* (not re-training the teacher) is well spent.
-- Predicting *latents* transfers structure that logit-distillation misses (see why plain [distillation](distillation.md) leaks).
+**References.** SALT, `2509.24317`; I-JEPA (Assran et al., 2023); US-JEPA, `2602.19322`; Bootleg, `2603.15553`.
 
-It's the **install** step of the headline recipe: *[crosscoder extract](dictionary-sae-crosscoder.md) → [OT/GW map](transport-ot-gw.md) → **JEPA install** → [OPD shape](on-policy-distillation.md).*
-
-## The key mechanic
-- Teacher frozen; student + a small **predictor head** trained to match teacher latents at chosen layers (a [mapped](transport-ot-gw.md) target space handles the dimension gap).
-- Loss is in *latent* space (cosine/MSE on representations), often asymmetric (predict teacher from student context).
-- Multi-layer targets (Bootleg) transfer a richer geometric stack.
-
-## The catch
-- **You actually train the student** — more compute than steering/grafting.
-- **Representation collapse / brittleness** is the classic JEPA failure (student maps everything to a trivial constant); needs the usual anti-collapse care (stop-grad, asymmetry, variance/covariance terms).
-
-## References
-- SALT (frozen-teacher latent prediction), `2509.24317`
-- I-JEPA (Assran et al., 2023); US-JEPA, `2602.19322`; Bootleg (multi-layer), `2603.15553`
-
-## Related
-[distillation](distillation.md) (what this improves on) · [on-policy-distillation](on-policy-distillation.md) (the shaping step after) · [transport-ot-gw](transport-ot-gw.md) (handles the target-space dimension gap)
+**Related.** [distillation](distillation.md), [on-policy-distillation](on-policy-distillation.md), [transport-ot-gw](transport-ot-gw.md).

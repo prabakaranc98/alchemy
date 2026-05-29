@@ -1,29 +1,11 @@
-# On-Policy Distillation (OPD)
+# On-policy distillation
 
-**Layer:** Shape · **Role:** frontier-proven backbone **and** the baseline every novel route must beat
+Classical [distillation](distillation.md) trains the student on the teacher's own data, off-policy. On-policy distillation instead has the student generate its own rollouts and then has the teacher supply dense, per-token supervision, by reverse KL, on the states the student actually visits. It combines the corrective character of reinforcement learning, in which the student learns from its own trajectories, with the dense signal of distillation. A multi-teacher variant routes several domain teachers into a single student, which is knowledge fusion realised in a training pipeline.
 
-## What it is
-Classic [distillation](distillation.md) trains the student on the *teacher's* data (off-policy). **On-policy distillation** instead has the **student generate its own rollouts**, then the **teacher supplies dense supervision (reverse-KL) on the states the student actually visits.** It combines RL's "learn from your own mistakes" with distillation's dense per-token signal. **Multi-Teacher OPD (MOPD)** routes several domain teachers into one student — *compact knowledge fusion in production*.
+The method has two roles in the project. It is a backbone, being the means by which several frontier models have in fact been reduced in size, and it produces a working specialist economically, reportedly matching full reinforcement-learning reasoning performance at roughly an order of magnitude less compute than [GRPO](rl-grpo.md). It is also the baseline against which the novel transplant routes must be judged, since each must improve on plain on-policy distillation to justify itself; it is the denominator of the transfer-versus-distillation difference, and is established in the first experiment. It is the shaping step that concludes the composed recipe.
 
-## Why it matters for Alchemy
-Two roles at once:
-1. **Backbone.** This is how frontier labs actually shrink models (Qwen3, GLM-5, MiMo). It will produce a working specialist cheaply — **matching full-RL reasoning performance at ~10× lower compute than [GRPO](rl-grpo.md).**
-2. **The baseline to beat.** Every novel transplant route (transport, dictionary, JEPA) must clear *plain OPD* to justify itself. Establish it in **Exp 0**; it's the denominator of the transfer-vs-distillation delta.
+In operation the student samples completions on-policy to produce trajectories, and the teacher scores each visited token by reverse KL, pushing the student toward the teacher's distribution at the states the student in fact occupies; no reward model is required, the teacher itself being the source of supervision. The principal caution is that reverse KL is mode-seeking, so the student concentrates on the teacher's dominant modes and may lose diversity, which bears directly on the general-competence aim and motivates entropy-aware variants. The method transfers what the teacher does rather than an isolable, interpretable module, which is why it functions as the baseline rather than as the interpretability contribution.
 
-The headline recipe ends here: *extract → map → install → **shape (OPD)**.*
+**References.** Thinking Machines Lab, *On-Policy Distillation* (2025); OPD unification, `2605.16826`; entropy-aware OPD, `2603.07079`.
 
-## The key mechanic
-- Student samples completions on-policy ⇒ trajectories.
-- Teacher scores each student-visited token with **reverse KL** (dense, per-token), pushing the student toward the teacher's distribution *where the student actually is*.
-- No reward model needed; supervision is the teacher itself.
-
-## The catch
-- **Reverse KL is mode-seeking** — the student concentrates on the teacher's dominant modes and can **lose diversity**. Watch this directly against the *general-capacity* goal (Open Question 6); entropy-aware variants exist.
-- It transfers what the teacher *does*, not necessarily an interpretable, isolable module — so it's the baseline, not the interpretability contribution.
-
-## References
-- Thinking Machines Lab, *On-Policy Distillation* (2025); OPD unification, `2605.16826`
-- Entropy-aware OPD, `2603.07079`
-
-## Related
-[distillation](distillation.md) (the off-policy version it fixes) · [rl-grpo](rl-grpo.md) (the route that can exceed the teacher) · [predictive-jepa](predictive-jepa.md) (the install step before shaping)
+**Related.** [distillation](distillation.md), [rl-grpo](rl-grpo.md), [predictive-jepa](predictive-jepa.md).

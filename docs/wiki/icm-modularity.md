@@ -1,27 +1,11 @@
-# Independent Causal Mechanisms / Modularity
+# Independent causal mechanisms and modularity
 
-**Layer:** Theory · **Role:** the backbone — *what is movable at all*
+The principle of independent causal mechanisms holds that a data-generating process factorises into autonomous components that neither inform nor constrain one another. Intervening on one mechanism — the illumination of a scene, say — leaves the others, such as object identity or pose, unchanged. A representation that reflects this factorisation has parts that can be isolated, reused, and recombined without disturbing the rest.
 
-## What it is
-The **Independent Causal Mechanisms (ICM)** principle says the data-generating process factorizes into **autonomous modules** that don't inform or influence each other. Change one mechanism (e.g. lighting in an image) and the others (object identity, pose) stay fixed. A representation that mirrors this factorization has parts you can swap, reuse, and recombine independently.
+This principle is the assumption the project rests on. If a capability corresponds to an independent mechanism, it is an object that can be extracted and grafted; if it is distributed across the network and entangled with unrelated computation, no mapping procedure will recover it cleanly. The principle thus restates the question "can capability X be transferred?" as "is X modular in this model?", which is the sense in which the binding constraint is modularity rather than compute. It is adopted in preference to the [Platonic Representation Hypothesis](platonic-representation.md) because it makes the weaker and testable claim that *some* structure is modular and that modular structure transfers, rather than the stronger claim that representations converge in general.
 
-## Why it matters for Alchemy
-This is the load-bearing assumption of the whole project. **If a capability corresponds to an independent mechanism, it's a module you can extract and graft. If it's entangled with everything else, it won't come loose** — no mapping trick will save you. ICM reframes "can we transfer capability X?" as "**is X modular in this model?**" That's why the central bet says the binding constraint is *modularity, not compute*.
+The properties that matter for transfer are independence, in that mechanisms share no parameters; reusability, in that the same mechanism recurs across tasks, which is what makes transfer possible at all; and locality, in that editing one mechanism leaves the others invariant, which is the property a clean transplant requires. The qualification is that real networks factorise only approximately, and few capabilities are perfectly modular. The principle also offers no procedure for measuring modularity directly; constructing such a measure, so that transferability can be predicted in advance, is one of the project's open questions.
 
-ICM is deliberately chosen over the [Platonic Representation Hypothesis](platonic-representation.md) as the backbone: PRH's strong "everything converges" form is contested, while ICM makes a *weaker, testable* claim — *some* structure is modular, and modular structure transfers.
+**References.** Parascandolo, Schölkopf et al., *Learning Independent Causal Mechanisms*, `1712.00961`; Schölkopf et al., *Toward Causal Representation Learning*, `2102.11107`.
 
-## The key mechanic
-- Mechanisms are **independent**: knowing one tells you nothing about the others (no shared parameters).
-- They're **reusable**: the same mechanism reappears across tasks/domains (this is what makes transfer possible).
-- **Interventions are local**: editing one module leaves the rest invariant — exactly the property a clean "transplant" needs.
-
-## The catch
-- Real networks only *approximately* factorize; few capabilities are perfectly modular.
-- ICM is a principle, not a detector — you still need a *measure* of modularity to predict transferability (Open Question 8). Building that measure is part of the contribution.
-
-## References
-- Parascandolo, Schölkopf et al., *Learning Independent Causal Mechanisms*, `1712.00961`
-- Schölkopf et al., *Toward Causal Representation Learning*, `2102.11107`
-
-## Related
-[nonlinear-ica](nonlinear-ica.md) (when a module is *identifiable*) · [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md) (the practical extractor) · [platonic-representation](platonic-representation.md) (the rejected stronger claim)
+**Related.** [nonlinear-ica](nonlinear-ica.md), [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md), [platonic-representation](platonic-representation.md).

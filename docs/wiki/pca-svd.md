@@ -1,24 +1,11 @@
-# PCA / SVD — subspace extraction
+# Principal components and singular value decomposition
 
-**Layer:** Extract (supporting primitive) · **Role:** the cheap "what to move" baseline
+Principal component analysis identifies the orthogonal directions of greatest variance in a set of activations; the singular value decomposition factorises a matrix, such as a weight difference or a task vector, into low-rank components. Both yield a subspace — a compact basis for the part of the representation where a capability is concentrated.
 
-## What it is
-**PCA** finds the orthogonal directions of maximum variance in activations; **SVD** factorizes a matrix (e.g. a weight delta or a task vector) into low-rank components. Both give you a **subspace** — a compact basis for "where the action is."
+Before the heavier interpretable machinery is invoked, these provide the baseline answer to the question of where in the model a capability resides. The approach is established in merging, where applying the singular value decomposition to task vectors yields low-rank subspaces that reduce interference when models are combined; this bears directly on the [merging ceiling](model-merging.md) and on the composition question. If a capability is well captured by a few principal directions, the more elaborate extraction may be unnecessary, and the linear subspace serves as the null hypothesis against which the [dictionary route](dictionary-sae-crosscoder.md) must justify itself.
 
-## Why it matters for Alchemy
-Before reaching for SAEs or crosscoders, PCA/SVD is the **baseline answer to "what part of the model carries this capability?"** It's already proven in merging: running **SVD on task vectors** yields low-rank subspaces that **reduce interference** when combining models — directly relevant to the [merging ceiling](model-merging.md) and to [composition](quality-diversity.md). If a capability is well-captured by a few principal directions, you may not need the heavier interpretable machinery at all.
+In practice one collects activations or a weight difference, centres them, and retains the leading singular vectors to obtain a low-dimensional subspace within which transplant or merging is performed, reducing collision between tasks relative to working in the full space. The limitation is that these directions maximise variance rather than independence or interpretability and therefore mix mechanisms together, which is precisely the gap that [independent component analysis](nonlinear-ica.md) addresses; and being linear, they miss curved structure that [manifold methods](manifold-learning.md) recover.
 
-## The key mechanic
-- Collect activations (or a weight/task-vector delta), center, take top-k singular vectors ⇒ a k-dim subspace.
-- Transplant/merge within that subspace instead of full-dim ⇒ less cross-task collision.
-- Serves as the **null hypothesis** for the [dictionary route](dictionary-sae-crosscoder.md): "does sparse, interpretable extraction beat plain low-rank?"
+**References.** Task-vector and low-rank merging, see [model-merging](model-merging.md).
 
-## The catch
-- PCA directions are **variance-maximizing, not independent or interpretable** — they mix mechanisms (this is exactly the gap [ICA/nonlinear-ICA](nonlinear-ica.md) addresses).
-- Linear only; misses curved structure that [manifold methods](manifold-learning.md) capture.
-
-## References
-- Task-vector + SVD low-rank merging (task arithmetic line, see [model-merging](model-merging.md))
-
-## Related
-[dictionary-sae-crosscoder](dictionary-sae-crosscoder.md) (the interpretable upgrade) · [nonlinear-ica](nonlinear-ica.md) (independence vs. variance) · [model-merging](model-merging.md) (where SVD subspaces reduce interference)
+**Related.** [dictionary-sae-crosscoder](dictionary-sae-crosscoder.md), [nonlinear-ica](nonlinear-ica.md), [model-merging](model-merging.md).
