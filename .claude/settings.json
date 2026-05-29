@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"exit:$?\")",
+      "Bash(git status *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(xargs -n1 basename)"
+    ]
+  }
+}
